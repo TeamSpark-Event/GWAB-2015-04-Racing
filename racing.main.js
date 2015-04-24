@@ -123,15 +123,18 @@ window.racing.app = window.racing.app || {};
     function initCountryStat(track, selector, countryCode) {
 
         // ToDo: Add code to get the country track data and pass it to the render method
-
+        track.getRankingLapTimesByCountry(function (data) {
+            renderRankingLapTimes(data, '.track-stats-country ' + selector, track, 'Country');
+        }, ['PartitionKey', 'PlayerName', 'Location', 'LapTimeMs', 'Damage', 'LapId'], countryCode);
 
     }
 
     function initCountryStats(countryCode) {
 
         // ToDo: Add code to initialize the country data for the three tracks
-
-
+        initCountryStat(racing.data.beginnerTrack, '.track-stats-beginner', countryCode);
+        initCountryStat(racing.data.advancedTrack, '.track-stats-advanced', countryCode);
+        initCountryStat(racing.data.expertTrack, '.track-stats-expert', countryCode);
     }
 
     // Location Statistics
@@ -140,7 +143,9 @@ window.racing.app = window.racing.app || {};
     function initLocationStat(track, selector, locationId) {
 
         // ToDo: Add code to get the location track data and pass it to the render method
-
+        track.getRankingLapTimesByLocation(function (data) {
+            renderRankingLapTimes(data, '.track-stats-location ' + selector, track, 'Location');
+        }, ['PartitionKey', 'PlayerName', 'LapTimeMs', 'Dammage', 'LapId'], locationId);
 
     }
 
@@ -150,18 +155,19 @@ window.racing.app = window.racing.app || {};
     function initLocationStats(locationId) {
 
         // ToDo: Add code to initialize the location data for the beginner track
-
+        initLocationStat(racing.data.beginnerTrack, '.track-stats-beginner', locationId);
 
         // ToDo: Add code to initialize the location data for the advanced and expert tracks
-
+        initLocationStat(racing.data.advancedTrack, '.track-stats-advanced', locationId);
+        initLocationStat(racing.data.expertTrack, '.track-stats-expert', locationId);
 
     }
 
 
 
     // ToDo: Set your country code and location ID.
-    var yourLocationId = 'YOUR_LOCATION_ID';
-    var yourCountryCode = 'YOUR_COUNTRY_CODE';
+    var yourLocationId = '1941';
+    var yourCountryCode = 'UA';
 
     // Initialize the page with location statistics
     initLocationStats(yourLocationId);

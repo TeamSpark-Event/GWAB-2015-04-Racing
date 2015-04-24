@@ -97,7 +97,23 @@ window.racing.data = window.racing.data || {};
     function getJson(url, successCallback, errorCallback) {
 
         // ToDo: Add code to get JSON data from a URI
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.setRequestHeader('Accept', 'application/json');
+        request.onload = function () {
+            if (this.status >= 200 && this.status < 400) {
+                var data = JSON.parse(this.response);
+                successCallback(data);
+            } else {
+                errorCallback(this);
+            }
+        };
 
+        request.onerror = function () {
+            errorCallback(this);
+        };
+
+        request.send();
 
     }
 
@@ -106,7 +122,24 @@ window.racing.data = window.racing.data || {};
     function getTableStorageUrl(auth, fields, filter) {
 
         // ToDo: Add code to format a table storage URL with shared access signature
+        var baseUrl = tableStorageBaseUrl
+            + auth.tableName
+            + '?tn=' + auth.tableName
+            + '&sv=2014-02-14&si=GabLab'
+            + '&sig=' + auth.signature;
 
+        var filterUrl = '';
+        var fieldsUrl = '';
+
+        if (filter && typeof (filter.partitionKey) != 'undefined') {
+            filterUrl = "&$filter=PartitionKey eq '" + filter.partitionKey + "'";
+        }
+
+        if (fields && fields.length) {
+            fieldsUrl = "&$select=" + fields.join(',');
+        }
+
+        return baseUrl + fieldsUrl + filterUrl;
 
     }
 
@@ -116,7 +149,12 @@ window.racing.data = window.racing.data || {};
     function getTableStorageData(auth, successCallback, fields, filter) {
 
         // ToDo: Add code to get data from a Table Storage table
-
+        var url = getTableStorageUrl(auth, fields, filter);
+        getJson(url, function (data) {
+            successCallback(data.value);
+        }, function (error) {
+            console.error(error);
+        });
 
     }
 
@@ -127,10 +165,19 @@ window.racing.data = window.racing.data || {};
         return {
 
             // ToDo: Add code to get data for the specific location
+            getRankingLapTimesByLocation: function (successCallback, fields, locationId) {
+                var filter = getPartitionFilter(locationId);
+                getTableStorageData(auths.tracks[track].rankingLapTimesLocationTrack,
+                    successCallback, fields, filter);
+            },
 
 
             // ToDo: Add code to get data for the specific country
-
+            getRankingLapTimesByCountry: function (successCallback, fields, countryCode) {
+                var filter = getPartitionFilter(countryCode);
+                getTableStorageData(auths.tracks[track].rankingLapTimesCountryTrack,
+                    successCallback, fields, filter);
+            },
 
             // ToDo: Add code to get the telemetry data for a specific lap
 
