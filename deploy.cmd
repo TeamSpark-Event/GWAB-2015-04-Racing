@@ -79,8 +79,6 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   SET NODE_EXE=node
 )
 
-  SET BOWER_CMD=bower 
-
 goto :EOF
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -110,7 +108,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 :: 4. Install bower packages
 IF EXIST "%DEPLOYMENT_TARGET%\bower.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd !BOWER_CMD! install
+  call :ExecuteCmd bower install --production
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )

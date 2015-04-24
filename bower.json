@@ -20,6 +20,6 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.4",
-    "bootswatch": "~3.3.4+1"
+    "bootswatch": "~3.3.4"
   }
 }
