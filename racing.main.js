@@ -145,7 +145,7 @@ window.racing.app = window.racing.app || {};
         // ToDo: Add code to get the location track data and pass it to the render method
         track.getRankingLapTimesByLocation(function (data) {
             renderRankingLapTimes(data, '.track-stats-location ' + selector, track, 'Location');
-        }, ['PartitionKey', 'PlayerName', 'LapTimeMs', 'Dammage', 'LapId'], locationId);
+        }, ['PartitionKey', 'PlayerName', 'LapTimeMs', 'Damage', 'LapId'], locationId);
 
     }
 
